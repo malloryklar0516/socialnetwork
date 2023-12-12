@@ -14,22 +14,21 @@ const userSchema = new Schema(
       type: String,
       required: true,
       unique: true,
-      //look into Mongoose matching validation, must match valid email
+      //Mongoose matching validation, must match valid email
       match: [/^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/]
     },
     thoughts: [{
         type: Schema.Types.ObjectId,
-        ref: 'thought'
+        ref: 'Thought'
     }]
     ,
     friends: [{
         type: Schema.Types.ObjectId,
-        ref: 'user'
+        ref: 'User'
     }],
   },
   {
     toJSON: {
-      getters: true,
       virtuals: true,
     },
   }
@@ -39,6 +38,6 @@ userSchema.virtual('friendCount').get(function (){
     return this.friends.length;
 })
 
-const User = model('user', userSchema);
-
+const User = model('User', userSchema);
+// export user model and schema
 module.exports = User;

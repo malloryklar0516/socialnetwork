@@ -50,8 +50,8 @@ module.exports = {
         }
       },
           //update thought
-    updateThought(req,res){
-        Thought.findOneAndUpdate({_id: req.params.thoughtId}, req.body, {new:true, runValidators:true})
+   async updateThought(req,res){
+   await     Thought.findOneAndUpdate({_id: req.params.thoughtId}, req.body, {new:true, runValidators:true})
         .then(async (thought) =>
         !thought
         //return if no thought found with that id
@@ -63,8 +63,8 @@ module.exports = {
       });
     },
     // Delete a thought
-    deleteThought(req, res) {
-      Thought.findOneAndRemove({ _id: req.params.thoughtId })
+   async deleteThought(req, res) {
+   await   Thought.findOneAndRemove({ _id: req.params.thoughtId })
         .then((thought) =>{
         if (!thought) {
           return res.status(404).json({message: "Thought doesn't exist"})
@@ -89,18 +89,17 @@ module.exports = {
         });},
 
 // add reaction to thought
-newReaction(req, res) {
+async newReaction(req, res) {
     console.log('You are adding a new reaction!');
     console.log(req.body);
-    Thought.findOneAndUpdate(
+   await Thought.findOneAndUpdate(
         {_id: req.params.thoughtId},
         {$addToSet: {reactions: req.body}},
         {runValidators: true, new: true}
     )
     .then((thought)=> 
     !thought 
-    ? res
-    .status(404).json({message: 'No thought exists with this ID'})
+    ? res.status(404).json({message: 'No thought exists with this ID'})
     : res.json(thought)
     )
     .catch((err)=> res.status(500).json(err));
